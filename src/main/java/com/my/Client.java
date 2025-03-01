@@ -8,7 +8,7 @@ import java.net.Socket;
 
 public class Client {
     public static void main(String[] args) {
-        try (Socket clientSocket = new Socket("localhost", Server.PORT);
+        try (Socket clientSocket = new Socket("netology.homework", Server.PORT);
              PrintWriter writer = new PrintWriter(clientSocket.getOutputStream(), true);
              BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()))) {
 
