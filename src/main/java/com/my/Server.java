@@ -1,4 +1,4 @@
-package org.example;
+package com.my;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,18 +9,18 @@ import java.net.Socket;
 
 
 public class Server {
-    public static final Integer PORT = 8089;
+    public static final Integer PORT = 8084;
 
     public static void main(String[] args) throws IOException {
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
             System.out.println("Сервер запущен");
             while (true) {
                 try (Socket clientSocket = serverSocket.accept();
-                     PrintWriter printWriter = new PrintWriter(clientSocket.getOutputStream(), true);
-                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()))) {
-                    String infoFromClient = bufferedReader.readLine();
+                     PrintWriter writer = new PrintWriter(clientSocket.getOutputStream(), true);
+                     BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()))) {
+                    String infoFromClient = reader.readLine();
                     System.out.printf("Новое подключение принято. Информация: %s, порт: %d%n", infoFromClient, clientSocket.getPort());
-                    printWriter.printf("Привет! Твой порт %d%n", clientSocket.getPort());
+                    writer.printf("Привет! Твой порт %d%n", clientSocket.getPort());
                 }
 
             }
