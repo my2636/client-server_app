@@ -21,8 +21,8 @@ public class Server {
 
     public static void main(String[] args) throws IOException {
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
-
             System.out.println("Сервер запущен");
+
             while (true) {
                 try (Socket clientSocket = serverSocket.accept();
                      PrintWriter writer = new PrintWriter(clientSocket.getOutputStream(), true);
@@ -31,7 +31,7 @@ public class Server {
                     writer.println("Приветствую! На сервере живет хороший кот. Я могу: 1. Показать кота" +
                             " 2. Принять нового кота 3. Отдать своего кота");
                     String clientAnswer;
-                    while(!(clientAnswer = reader.readLine()).equalsIgnoreCase("выход")) {
+                    while (!(clientAnswer = reader.readLine()).equalsIgnoreCase("выход")) {
                         String serverAnswer = getAction(clientAnswer);
                         writer.println(serverAnswer);
                     }
@@ -55,12 +55,14 @@ public class Server {
             case "3":
                 serverAnswer = catCount == 0 ? "Коты закончились, приходите позже. Сейчас сервер в режиме приема котов." :
                         "Вот тебе кот, он твой. Заботься о нем. Пока, кот! Что-то еще подсказать по котам?";
-                if (catCount !=0) {
+                if (catCount != 0) {
                     catCount--;
                 }
                 break;
-            default: serverAnswer = "Ну как без котов-то.";
+            default:
+                serverAnswer = "Ну как без котов-то.";
         }
+
         return serverAnswer;
     }
 }

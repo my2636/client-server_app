@@ -11,8 +11,6 @@ import java.util.Scanner;
 public class Client {
     public static void main(String[] args) {
 
-
-
         try (Socket clientSocket = new Socket("netology.homework", Server.PORT);
              PrintWriter writer = new PrintWriter(clientSocket.getOutputStream(), true);
              BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
@@ -21,17 +19,13 @@ public class Client {
             writer.println("Привет, сервер!");
             System.out.println(reader.readLine());
             String userInput;
+
             while (!(userInput = scanner.nextLine()).equalsIgnoreCase("выход")) {
                 writer.println(userInput);
                 System.out.println(reader.readLine());
             }
-
-
-
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-
     }
 }
