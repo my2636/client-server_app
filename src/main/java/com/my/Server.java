@@ -1,11 +1,10 @@
 package com.my;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /*В серверной и клиентской части сделайте последовательность вызовов в рамках одной сессии таким образом, чтобы получился
@@ -17,23 +16,51 @@ adult zone, %username%! Have a good rest, or a good working day! (где %userna
 
 
 public class Server {
-    public static final Integer PORT = 8084;
+    public static final Integer PORT = 8083;
+    static int catCount = 1;
 
     public static void main(String[] args) throws IOException {
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
+
             System.out.println("Сервер запущен");
             while (true) {
                 try (Socket clientSocket = serverSocket.accept();
                      PrintWriter writer = new PrintWriter(clientSocket.getOutputStream(), true);
                      BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()))) {
-                    String infoFromClient = reader.readLine();
-                    System.out.printf("Новое подключение принято. Информация: %s, порт: %d%n", infoFromClient, clientSocket.getPort());
-                    writer.printf("Привет! Твой порт %d%n", clientSocket.getPort());
+                    System.out.println(reader.readLine());
+                    writer.println("Приветствую! На сервере живет хороший кот. Я могу: 1. Показать кота" +
+                            " 2. Принять нового кота 3. Отдать своего кота");
+                    String clientAnswer;
+                    while(!(clientAnswer = reader.readLine()).equalsIgnoreCase("выход")) {
+                        String serverAnswer = getAction(clientAnswer);
+                        writer.println(serverAnswer);
+                    }
                 }
-
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    static String getAction(String clientAnswer) {
+        String serverAnswer;
+        switch (clientAnswer) {
+            case "1":
+                serverAnswer = "Вот кот - он хранитель сервера. Какие коты еще интересуют?";
+                break;
+            case "2":
+                catCount++;
+                serverAnswer = "Давай кота. Теперь на сервере " + catCount + " котов, они подружились. Какие коты еще интересуют?";
+                break;
+            case "3":
+                serverAnswer = catCount == 0 ? "Коты закончились, приходите позже. Сейчас сервер в режиме приема котов." :
+                        "Вот тебе кот, он твой. Заботься о нем. Пока, кот! Что-то еще подсказать по котам?";
+                if (catCount !=0) {
+                    catCount--;
+                }
+                break;
+            default: serverAnswer = "Ну как без котов-то.";
+        }
+        return serverAnswer;
     }
 }
